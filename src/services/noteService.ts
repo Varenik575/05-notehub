@@ -9,7 +9,8 @@ interface FetchNotesResponse {
 }
 
 export const fetchNotes = async(newSearch?:string, newPage:number = 1 ):Promise<FetchNotesResponse> => {
-    const response:AxiosResponse<FetchNotesResponse> = await axios.get<FetchNotesResponse>(`https://notehub-public.goit.study/api/notes`, {
+    const response:AxiosResponse<FetchNotesResponse> = 
+    await axios.get<FetchNotesResponse>(`https://notehub-public.goit.study/api/notes`, {
         headers: {
             Authorization: `Bearer ${AUTHORISATION_KEY}`
         },
@@ -23,7 +24,7 @@ export const fetchNotes = async(newSearch?:string, newPage:number = 1 ):Promise<
     return response.data;
 }
 
-export const createNote = async(newTitle:string, newContent:string, newTag: Note["tag"]) => {
+export const createNote = async(newTitle:string, newContent:string, newTag: Note["tag"]):Promise<Note> => {
 
 const newNote = {
     title: newTitle,
@@ -31,11 +32,28 @@ const newNote = {
     tag: newTag
 };
 
-  const response = await axios.post("https://notehub-public.goit.study/api/notes", { newNote,
-     headers: {
-            Authorization: `Bearer ${AUTHORISATION_KEY}`
-        } });
+  const response = await axios.post<Note>(
+  'https://notehub-public.goit.study/api/notes',
+  newNote,
+  {
+    headers: {
+      'accept': 'application/json',
+      'Authorization': `Bearer ${AUTHORISATION_KEY}`,
+      'Content-Type': 'application/json'
+    }
+  }
+);
  return response.data;
+}
+
+export const deleteNote = async(noteId:Note['id']):Promise<Note> => {
+const response:AxiosResponse<Note> = await axios.delete<Note>(`https://notehub-public.goit.study/api/notes/${noteId}`, {
+  headers: {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${AUTHORISATION_KEY}`
+  }
+});
+return response.data;
 }
 
  
