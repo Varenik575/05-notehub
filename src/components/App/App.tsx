@@ -27,7 +27,10 @@ function App() {
     <>
       <div className={css.app}>
         <header className={css.toolbar}>
-          <SearchBox onQueryEnter={useDebouncedCallback(setQuery, 500)} />
+          <SearchBox
+            onQueryEnter={useDebouncedCallback(setQuery, 500)}
+            rollbackPage={useDebouncedCallback(setCurrentPage, 500)}
+          />
           {data && data.totalPages > 1 && (
             <Pagination
               totalPages={data.totalPages}
