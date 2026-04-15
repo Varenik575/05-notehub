@@ -10,9 +10,9 @@ import SearchBox from '../SearchBox/SearchBox';
 import { useDebouncedCallback } from 'use-debounce';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [query, setQuery] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [query, setQuery] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -23,14 +23,16 @@ function App() {
     placeholderData: keepPreviousData,
   });
 
+  const handleQueryChange = useDebouncedCallback((newQuery: string) => {
+    setQuery(newQuery);
+    setCurrentPage(1);
+  }, 500);
+
   return (
     <>
       <div className={css.app}>
         <header className={css.toolbar}>
-          <SearchBox
-            onQueryEnter={useDebouncedCallback(setQuery, 500)}
-            rollbackPage={useDebouncedCallback(setCurrentPage, 500)}
-          />
+          <SearchBox onQueryEnter={handleQueryChange} />
           {data && data.totalPages > 1 && (
             <Pagination
               totalPages={data.totalPages}
@@ -46,7 +48,7 @@ function App() {
         {isModalOpen && (
           <Modal onClose={closeModal}>
             {' '}
-            <NoteForm onCancel={closeModal} />
+            <NoteForm onClose={closeModal} />
           </Modal>
         )}
       </div>

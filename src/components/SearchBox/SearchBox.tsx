@@ -3,14 +3,12 @@ import css from './SearchBox.module.css';
 
 interface SearchBoxProps {
   onQueryEnter: (newQuery: string) => void;
-  rollbackPage: (defaultPage: number) => void;
 }
 
-export default function SearchBox({ onQueryEnter, rollbackPage }: SearchBoxProps) {
+export default function SearchBox({ onQueryEnter }: SearchBoxProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSearch = event.target.value;
     onQueryEnter(newSearch);
-    rollbackPage(1);
   };
   return (
     <input

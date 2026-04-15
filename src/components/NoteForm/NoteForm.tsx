@@ -13,7 +13,7 @@ interface NoteFormValues {
 }
 
 interface NoteFormProps {
-  onCancel: () => void;
+  onClose: () => void;
 }
 
 const NoteFormSchema = Yup.object().shape({
@@ -30,11 +30,11 @@ const NoteFormSchema = Yup.object().shape({
     .required('Tag is a required field too!'),
 });
 
-export default function NoteForm({ onCancel }: NoteFormProps) {
+export default function NoteForm({ onClose }: NoteFormProps) {
   const fieldId = useId();
 
   const handleCancel = () => {
-    onCancel();
+    onClose();
   };
 
   const queryClient = useQueryClient();
@@ -44,7 +44,7 @@ export default function NoteForm({ onCancel }: NoteFormProps) {
       createNote(values.title, values.content, values.tag),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
-      onCancel();
+      onClose();
     },
   });
 
