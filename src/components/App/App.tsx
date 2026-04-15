@@ -7,6 +7,7 @@ import Pagination from '../Pagination/Pagination';
 import Modal from '../Modal/Modal';
 import NoteForm from '../NoteForm/NoteForm';
 import SearchBox from '../SearchBox/SearchBox';
+import { useDebouncedCallback } from 'use-debounce';
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,7 +17,7 @@ function App() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const { data /*, error, isLoading, isError*/  } = useQuery({
+  const { data /*, error, isLoading, isError*/ } = useQuery({
     queryKey: ['notes', query, currentPage],
     queryFn: () => fetchNotes(query, currentPage),
     placeholderData: keepPreviousData,
@@ -26,7 +27,7 @@ function App() {
     <>
       <div className={css.app}>
         <header className={css.toolbar}>
-          <SearchBox onQueryEnter={setQuery} />
+          <SearchBox onQueryEnter={useDebouncedCallback(setQuery, 500)} />
           {data && data.totalPages > 1 && (
             <Pagination
               totalPages={data.totalPages}
